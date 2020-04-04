@@ -1,7 +1,7 @@
 {
   "name": "mocha-behavior-tree",
   "version": "1.0.0",
-  "description": "Hierarchical scenarios for Mocha",
+  "description": "Hierarchical step definition for Mocha",
   "main": "lib/index.js",
   "scripts": {
     "test": "mocha"
@@ -28,6 +28,7 @@
   "homepage": "https://github.com/neocjmix/mocha-behavior-tree#readme",
   "devDependencies": {
     "@babel/core": "^7.9.0",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/preset-env": "^7.9.0",
     "@babel/register": "^7.9.0",
     "@types/mocha": "^7.0.2",
@@ -51,10 +52,12 @@
         "module-resolver",
         {
           "alias": {
-            "lib": "./lib"
+            "lib": "./lib",
+            "test": "./test"
           }
         }
-      ]
+      ],
+      "@babel/plugin-proposal-class-properties"
     ]
   }
 }

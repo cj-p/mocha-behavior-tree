@@ -1,2 +1,2 @@
 # mocha-behavior-tree
-hierarchical scenarios for Mocha
+Hierarchical step definition for Mocha
