@@ -1,0 +1,60 @@
+{
+  "name": "mocha-behavior-tree",
+  "version": "1.0.0",
+  "description": "Hierarchical scenarios for Mocha",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neocjmix/mocha-behavior-tree.git"
+  },
+  "keywords": [
+    "mocha",
+    "step",
+    "test",
+    "bdd",
+    "scenarios",
+    "tree",
+    "hierarchy",
+    "behavior"
+  ],
+  "author": "Chanjin Park",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/neocjmix/mocha-behavior-tree/issues"
+  },
+  "homepage": "https://github.com/neocjmix/mocha-behavior-tree#readme",
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.0",
+    "@babel/register": "^7.9.0",
+    "@types/mocha": "^7.0.2",
+    "babel-plugin-module-resolver": "^4.0.0",
+    "babel-polyfill": "^6.26.0",
+    "chai": "^4.2.0",
+    "mocha": "^7.1.1"
+  },
+  "mocha": {
+    "require": [
+      "@babel/register",
+      "babel-polyfill"
+    ]
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ],
+    "plugins": [
+      [
+        "module-resolver",
+        {
+          "alias": {
+            "lib": "./lib"
+          }
+        }
+      ]
+    ]
+  }
+}
