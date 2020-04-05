@@ -1,6 +1,6 @@
 {
   "name": "mocha-behavior-tree",
-  "version": "0.0.3-alpha",
+  "version": "0.0.4-alpha",
   "description": "Hierarchical step definition for Mocha",
   "main": "lib/index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/neocjmix/mocha-behavior-tree.git"
+    "url": "git+https://github.com/cj-p/mocha-behavior-tree.git"
   },
   "keywords": [
     "mocha",
@@ -23,9 +23,9 @@
   "author": "Chanjin Park",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/neocjmix/mocha-behavior-tree/issues"
+    "url": "https://github.com/cj-p/mocha-behavior-tree/issues"
   },
-  "homepage": "https://github.com/neocjmix/mocha-behavior-tree#readme",
+  "homepage": "https://github.com/cj-p/mocha-behavior-tree#readme",
   "peerDependencies": {
     "mocha": ">=2"
   },

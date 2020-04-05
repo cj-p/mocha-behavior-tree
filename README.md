@@ -2,11 +2,10 @@
 
 Hierarchical step definition for Mocha
 
-Easily defining multiple next test steps from the current state with a tree structure hierarchically for reducing duplication of test code and performing tests in a natural sequence of actions.
+Easily defining multiple next steps to test from the current state with a tree structure hierarchically for reducing duplication of test code and performing tests in a natural sequence of actions.
 
 ## Setup
 
-### ~~NPM package~~ (not published yet)
 ```sh
 npm i -D mocha mocha-behavior-tree
 ```
@@ -28,7 +27,7 @@ and(stepName:string, stepFunction:function, ...nextSteps:Step[]):Step;
 scenario(scenarioName:string, Step):Mocha.SuiteFunction;
 ```
 
-## Basic Example
+### Basic Example
 
 Given that there are below test cases:
 
@@ -84,7 +83,7 @@ User purchases products
            ✓ Orders for the products are created
 ```
 
-## Scenario, Given, When, Then
+### Scenario, Given, When, Then
 
 The library offers `scenario`, which is proxy for `describe`,  
 and `given`,`when`,`then`,`and` methods, which are proxies for `step`,  
@@ -149,7 +148,7 @@ describe('Shop tests', () => {
 })
 ```
 
-## Passing values to next Step
+### Passing values to next Step
 
 Each steps can return any values to be passed to the next steps function's argument.
 
@@ -210,7 +209,7 @@ describe('User purchases products',
 )
 ```
 
-## Async testing
+### Async testing
 
 Looking above example code, `getProductsPage` could be asyncronous function.
 
@@ -250,7 +249,7 @@ when('products are listed in the page',
 )
 ```
 
-## Use function name as step name
+### Use function name as step name
 
 Step name can be omitted. then function name will be used to step name
 
@@ -308,6 +307,6 @@ describe('User purchases products',() => {
 })
 ```
 
-## More usages
+### More usages
 
 You can find out more examples in the library's [test cases](https://github.com/neocjmix/mocha-behavior-tree/tree/master/test)
