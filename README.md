@@ -2,10 +2,12 @@
 
 Hierarchical step definition for Mocha
 
+[![NPM](http://img.shields.io/npm/v/mocha-behavior-tree.svg?style=flat-square)](https://npmjs.org/package/mocha-behavior-tree)
+[![License](http://img.shields.io/npm/l/mocha-behavior-tree.svg?style=flat-square)](https://github.com/cj-p/mocha-behavior-tree)
+
 Easily defining multiple next steps to test from the current state with a tree structure hierarchically for reducing duplication of test code and performing tests in a natural sequence of actions.
 
-## Setup
-
+## Install
 ```sh
 npm i -D mocha mocha-behavior-tree
 ```
@@ -309,4 +311,4 @@ describe('User purchases products',() => {
 
 ### More usages
 
-You can find out more examples in the library's [test cases](https://github.com/neocjmix/mocha-behavior-tree/tree/master/test)
+You can find out more examples in the library's [test cases](https://github.com/cj-p/mocha-behavior-tree/tree/master/test)
