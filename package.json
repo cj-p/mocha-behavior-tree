@@ -1,6 +1,6 @@
 {
   "name": "mocha-behavior-tree",
-  "version": "0.0.1",
+  "version": "0.0.3-alpha",
   "description": "Hierarchical step definition for Mocha",
   "main": "lib/index.js",
   "scripts": {
