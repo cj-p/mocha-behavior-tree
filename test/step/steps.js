@@ -1,5 +1,5 @@
 const { expect } = require('chai')
-const TestObject = require('./TestObject')
+const TestObject = require('../double/TestObject')
 
 module.exports = {
   'create Obj': () => ({ obj: new TestObject() }),

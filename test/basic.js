@@ -1,6 +1,6 @@
 const { expect } = require('chai')
 const { and, given, then, when, scenario } = require('../lib')
-const TestObject = require('./misc/TestObject')
+const TestObject = require('./double/TestObject')
 
 describe('mocha-behavior-tree', () =>
   scenario('test TestObject',

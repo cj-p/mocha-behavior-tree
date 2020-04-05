@@ -1,5 +1,5 @@
 const { and: 먼저, given: 만약, then: 그러면, when: 그리고, } = require('../lib')
-const $ = require('./misc/steps_2byte')
+const $ = require('./step/steps_2byte')
 
 const 시나리오 = describe
 

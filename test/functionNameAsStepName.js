@@ -1,5 +1,5 @@
 const { and, given, then, when, scenario } = require('../lib')
-const _ = require('./misc/steps')
+const _ = require('./step/steps')
 
 scenario('test TestObject',
   given(_['create Obj'],
