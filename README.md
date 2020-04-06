@@ -5,142 +5,117 @@ Hierarchical step definition for Mocha
 [![NPM](http://img.shields.io/npm/v/mocha-behavior-tree.svg?style=flat-square)](https://npmjs.org/package/mocha-behavior-tree)
 [![License](http://img.shields.io/npm/l/mocha-behavior-tree.svg?style=flat-square)](https://github.com/cj-p/mocha-behavior-tree)
 
-Easily defining multiple next steps to test from the current state with a tree structure hierarchically for reducing duplication of test code and performing tests in a natural sequence of actions.
+Easily defining multiple next steps to test from the current state with a tree structure hierarchically.
+This is useful for performing tests in a natural sequence of actions and reducing duplication of test code.
 
 ## Install
 ```sh
 npm i -D mocha mocha-behavior-tree
 ```
-```js
-const { step } = require('mocha-behavior-tree')
-```
 
 ## Usage
 
-```ts
-//basic api
-step(stepName:string, stepFunction:function, ...nextSteps:Step[]):Step;
-
-//bdd style api
-given(stepName:string, stepFunction:function, ...nextSteps:Step[]):Step;
-when(stepName:string, stepFunction:function, ...nextSteps:Step[]):Step;
-then(stepName:string, stepFunction:function, ...nextSteps:Step[]):Step;
-and(stepName:string, stepFunction:function, ...nextSteps:Step[]):Step;
-scenario(scenarioName:string, Step):Mocha.SuiteFunction;
-```
-
-### Basic Example
-
-Given that there are below test cases:
-
-- user login - list products - add the first product to cart
-- user login - list products - puchase the first products
-- user login - list products - select all products on the page - add selected products to cart
-- user login - list products - select all products on the page - puchase selected products
-
-When they can be organized like this:
-
-- user login
-  - list products
-    - add the first product to cart
-    - puchase the first products
-    - select all products on the page
-      - add selected products to cart
-      - puchase selected products
-
-And they are tested like this :
-
 ```js
 const { step } = require('mocha-behavior-tree')
 
-describe('User', 
-  step('user login', () => { /*...*/ },
-    step('list products', () => { /*...*/ },
-      step('add the first product to cart', () => { /*...*/ }),
-      step('puchase the first products', () => { /*...*/ }),
-      step('select all products on the page', () => { /*...*/ },
-        step('add selected products to cart', () => { /*...*/ }),
-        step('puchase selected products', () => { /*...*/ }),
-      ),
+describe(title:string,                                 //Mocha's describe
+  step(stepName:string, () => val1,                      //root : passing value to next step
+    step(stepName:string, val1 => { },                     //depth1 : bypass the value when return nothing
+      step(stepName:string, val1 => { /* assertion */ }),    //depth2
+      step(stepName:string, async val1 => await val2,        //depth2 : async step
+        step(stepName:string, val2 => { /* assertion */ }),    //depth3
+        ...
+      ),       
+      ...
     )
-  )
+  )    
 )
-```
-
-Then the results are like below :
-
-```yaml
-User purchases products
-   User login
-     List products
-       Add the first product to cart
-         ✓ The product is in the cart
-       Puchase the first products
-         ✓ An order for the product is created
-       Select all products on the page
-         ✓ all products are selected
-         Add selected products to cart
-           ✓ The products are in the cart
-         Puchase selected products
-           ✓ Orders for the products are created
 ```
 
 ### Scenario, Given, When, Then
 
-The library offers `scenario`, which is proxy for `describe`,  
-and `given`,`when`,`then`,`and` methods, which are proxies for `step`,  
-just adding BDD style keywords as prefix to the step name.
+`scenario` is proxy for `describe`, and `given`,`when`,`then`,`and` are proxies for `step`, just adding BDD style keywords as prefix to the step name.
+
+Below test case
 
 ```js
-const { scenario, given, when, then, and } = require('mocha-behavior-tree')
+const assert = require('assert')
+const { scenario, given, and, then, when } = require('mocha-behavior-tree')
 
-scenario('User purchases products', 
-  given('User login', () => { /*...*/ },
-    and('List products', () => { /*...*/ },
-      when('Add the first product to cart', () => { /*...*/ },
-        then('The product is in the cart', () => { /*...*/ })
+scenario('User purchases products',
+  given('User login',                         () => console.log('1. User login'),
+    and('List products',                        () => console.log('2. List products'),
+      when('Add the first product to cart',       () => console.log('3. Add the first product to cart'),
+        then('The product is in the cart',          () => assert(true))
       ),
-      when('Puchase the first products', () => { /*...*/ },
-        then('An order for the product is created', () => { /*...*/ })
+      when('Puchase the first products',          () => console.log('3. Puchase the first products'),
+        then('An order for the product is created', () => assert(true))
       ),
-      when('Select all products on the page', () => { /*...*/ },
-        then('all products are selected', () => { /*...*/ }),
-        and('Add selected products to cart', () => { /*...*/ },
-            then('The products are in the cart', () => { /*...*/ })
+      when('Select all products on the page',     () => console.log('3. Select all products on the page'),
+        then('all products are selected',           () => assert(true)),
+        and('Add selected products to cart',        () => console.log('4. Add selected products to cart'),
+          then('The products are in the cart',        () => assert(true))
         ),
-        and('Puchase selected products', () => { /*...*/ },
-            then('Orders for the products are created', () => { /*...*/ })
+        and('Puchase selected products',            () => console.log('4. Puchase selected products'),
+          then('Orders for the products are created', () => assert(true))
         ),
       ),
     )
   )
 )
+
 ```
 
-result :
+is executed as follows:
+
 ```yaml
-Scenario: User purchases products
-   Given: User login
-     And: List products
-       When: Add the first product to cart
-         ✓ Then: The product is in the cart
-       When: Puchase the first products
-         ✓ Then: An order for the product is created
-       When: Select all products on the page
-         ✓ Then: all products are selected
-         And: Add selected products to cart
-           ✓ Then: The products are in the cart
-         And: Puchase selected products
-           ✓ Then: Orders for the products are created
+// running each step route of the trees from the root to the leaf
+
+  Scenario: User purchases products
+    Given: User login
+      And: List products
+        When: Add the first product to cart
+          1. User login
+          2. List products
+          3. Add the first product to cart
+          ✓ Then: The product is in the cart
+          
+        When: Puchase the first products
+          1. User login
+          2. List products
+          3. Puchase the first products
+          ✓ Then: An order for the product is created
+          
+        When: Select all products on the page
+          1. User login
+          2. List products
+          3. Select all products on the page
+          ✓ Then: all products are selected
+          
+          And: Add selected products to cart
+            1. User login
+            2. List products
+            3. Select all products on the page
+            4. Add selected products to cart
+            ✓ Then: The products are in the cart
+            
+          And: Puchase selected products
+            1. User login
+            2. List products
+            3. Select all products on the page
+            4. Puchase selected products
+            ✓ Then: Orders for the products are created
+
+  5 passing 
 ```
 
 For integration with other test codes (or some IDE plugins), you can also do this:
 
 ```js
-const { scenario, given, when, then, and } = require('mocha-behavior-tree')
-
 describe('Shop tests', () => {
   describe('User', () => {
+    // Note that the scenario is called 'inside' the callback function, 
+    // not passed to describe as a callback function.
     scenario('User purchases products', 
       given('User login', () => { /*...*/ },
         /*...*/
@@ -150,22 +125,9 @@ describe('Shop tests', () => {
 })
 ```
 
-### Passing values to next Step
+### Passing values to the next Step
 
-Each steps can return any values to be passed to the next steps function's argument.
-
-```js
-describe('test value passing',
-  step('pass 1', 
-    () => 1,
-    step('passed value is 1', 
-      number => expect(number).to.equals(1)
-    )
-  )
-)
-```
-
-Multiple values can be passed with object key-values
+Multiple values can be passed to next step within object key-values
 
 ```js
 describe('test multiple value passing',
@@ -181,39 +143,7 @@ describe('test multiple value passing',
 )
 ```
 
-Applied to above example
-
-```js
-describe('User purchases products',
-  given('User', () => new User('testId'),
-    and('user logged in', 
-      user => {
-        user.login() // returning nothing, argument will be bypassed.
-      },
-      and('products are listed in the page', 
-        user => ({ user, page: getProductsPage({ page: 1, size: 20 }) }),
-        when('Add the first product to cart', 
-          ({ user, page }) => {
-            const firstProduct = page.content[0]
-            user.cart.add(firstProduct)
-            return { cart: user.cart, firstProduct } // pass only values that will be needed for next step
-          },
-          then('The product is in the cart',
-            ({ cart, firstProduct }) => {
-              expect(cart.has(firstProduct)).to.be.true
-              expect(cart.size()).to.be.equals(1)
-            }
-          )
-        )
-      )
-    )
-  )
-)
-```
-
 ### Async testing
-
-Looking above example code, `getProductsPage` could be asyncronous function.
 
 ```js
 when('products are listed in the page', 
@@ -226,8 +156,6 @@ when('products are listed in the page',
 )
 ```
 
-or 
-
 ```js
 when('products are listed in the page', 
   async () => ({ page : await getProductsPage({ page: 1, size: 20 }) }), // async/await
@@ -235,19 +163,6 @@ when('products are listed in the page',
     ({ page }) => {
       // got resolved value here
     })
-)
-```
-
-or just
-
-```js
-when('products are listed in the page', 
-  () => getProductsPage({ page: 1, size: 20 }), //this also returns promise
-  then('Add the first product to cart', 
-    page => {
-      // got resolved value here
-    }
-  )
 )
 ```
 
@@ -274,7 +189,7 @@ describe('User purchases products',
 ```
 result :
 
-```
+```yaml
 User purchases products
   Given: user
     And: user_logged_in
@@ -287,11 +202,11 @@ This can be done more Cucumber way
 ```js
 // steps.js
 module.exports = {
-  'user': (/*...*/) => { /*...*/ },
-  'user logged in': (/*...*/) => { /*...*/ },
-  'products are listed in the page': (/*...*/) => { /*...*/ },
-  'add the first product to cart': (/*...*/) => { /*...*/ },
-  'the product is in the cart': (/*...*/) => { /*...*/ },
+  'user': () => { ... },
+  'user logged in': () => { ... },
+  'products are listed in the page': () => { ... },
+  'add the first product to cart': () => { ... },
+  'the product is in the cart': () => { ... },
 }
 
 //test.js
