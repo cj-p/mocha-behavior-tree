@@ -19,11 +19,11 @@ npm i -D mocha mocha-behavior-tree
 const { step } = require('mocha-behavior-tree')
 
 describe('test',                                   //Mocha's describe
-  step('root step', () => val1,                      //root : passing value to next step
-    step('step 1', val1 => { },                      //depth1 : bypass the value when return nothing
-      step('step 1.1', val1 => { /* assertion */ }),   //depth2
-      step('step 1.2', async val1 => await val2,       //depth2 : async step
-        step('step 1.2.1', val2 => { /* assertion */ }), //depth3
+  step('root step', () => foo,                      //root : passing value to next step
+    step('step 1', foo => { },                      //depth1 : bypass the value when return nothing
+      step('step 1.1', foo => { /* assertion */ }),   //depth2
+      step('step 1.2', async foo => await bar,       //depth2 : async step
+        step('step 1.2.1', bar => { /* assertion */ }), //depth3
         ...
       ),       
       ...
